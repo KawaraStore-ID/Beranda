@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kawara Jasa – Jasa Online Murah & Terpercaya</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --p1: #1a0533;
+    --p2: #2d0a52;
+    --p3: #4b1a8a;
+    --p4: #7b3fcf;
+    --p5: #a96ef5;
+    --p6: #d4a9ff;
+    --accent: #f0c6ff;
+    --gold: #e8c84a;
+    --white: #faf5ff;
+    --text: #ede0ff;
+    --muted: #9b7abf;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--p1);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+    min-height: 100vh;
+  }
+
+  /* CURSOR */
+  .cursor { width:12px;height:12px;background:var(--p5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,background 0.2s;mix-blend-mode:screen; }
+  .cursor-ring { width:36px;height:36px;border:1.5px solid var(--p5);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.18s ease,border-color 0.2s;opacity:0.6; }
+
+  /* BLOBS */
+  .bg-blob { position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:0.22;z-index:0; }
+  .blob1 { width:600px;height:600px;background:var(--p4);top:-150px;left:-150px;animation:blobFloat 12s ease-in-out infinite; }
+  .blob2 { width:400px;height:400px;background:var(--p5);top:50%;right:-100px;animation:blobFloat 15s ease-in-out infinite reverse; }
+  .blob3 { width:300px;height:300px;background:var(--p3);bottom:10%;left:30%;animation:blobFloat 10s ease-in-out infinite 3s; }
+  @keyframes blobFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-30px) scale(1.05)} }
+
+  body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:0.5; }
+
+  /* NAV */
+  nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(26,5,51,0.75);border-bottom:1px solid rgba(123,63,207,0.2); }
+  .nav-logo { font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.5px;color:var(--white);text-decoration:none; }
+  .nav-logo span { color:var(--p5); }
+  .nav-links { display:flex;gap:32px;list-style:none; }
+  .nav-links a { font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:0.5px;transition:color 0.2s;position:relative; }
+  .nav-links a::after { content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--p5);transform:scaleX(0);transition:transform 0.25s; }
+  .nav-links a:hover { color:var(--accent); }
+  .nav-links a:hover::after { transform:scaleX(1); }
+  .nav-cta { background:var(--p4);color:var(--white)!important;padding:8px 20px;border-radius:100px;transition:background 0.2s!important; }
+  .nav-cta:hover { background:var(--p5)!important; }
+  .nav-cta::after { display:none!important; }
+
+  main { position:relative;z-index:2; }
+
+  /* HERO */
+  #hero {
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    padding:120px 24px 60px;
+  }
+  .hero-badge {
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(123,63,207,0.18);
+    border:1px solid rgba(123,63,207,0.4);
+    border-radius:100px;padding:6px 16px;
+    font-size:0.78rem;color:var(--p6);letter-spacing:1.5px;text-transform:uppercase;
+    margin-bottom:28px;animation:fadeUp 0.6s ease both;
+  }
+  .hero-badge .dot { width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+  h1 {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(3.2rem,9vw,7rem);
+    font-weight:800;line-height:0.93;letter-spacing:-3px;
+    color:var(--white);
+    margin-bottom:12px;
+    animation:fadeUp 0.7s 0.1s ease both;
+  }
+  h1 em { font-style:normal;background:linear-gradient(135deg,var(--p5),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+  .hero-sub {
+    font-size:clamp(1rem,2vw,1.15rem);color:var(--muted);max-width:480px;line-height:1.7;margin:20px auto 48px;
+    animation:fadeUp 0.7s 0.2s ease both;
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* PILIH LAYANAN CARDS */
+  .layanan-grid {
+    display:grid;grid-template-columns:1fr 1fr;gap:24px;
+    max-width:860px;width:100%;
+    animation:fadeUp 0.7s 0.3s ease both;
+  }
+
+  .layanan-card {
+    background:rgba(45,10,82,0.35);
+    border:1px solid rgba(123,63,207,0.25);
+    border-radius:28px;padding:44px 36px;
+    text-decoration:none;color:inherit;
+    display:flex;flex-direction:column;align-items:flex-start;gap:16px;
+    transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;
+    position:relative;overflow:hidden;
+    cursor:none;
+    text-align:left;
+  }
+  .layanan-card::before {
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(123,63,207,0.1),transparent);
+    opacity:0;transition:opacity 0.3s;
+  }
+  .layanan-card:hover { transform:translateY(-8px);border-color:rgba(169,110,245,0.6);box-shadow:0 24px 72px rgba(75,26,138,0.35); }
+  .layanan-card:hover::before { opacity:1; }
+
+  .card-emoji { font-size:3rem;line-height:1; }
+  .card-title { font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);line-height:1.1; }
+  .card-desc { font-size:0.88rem;color:var(--muted);line-height:1.65; }
+
+  .card-tags { display:flex;flex-wrap:wrap;gap:6px;margin-top:4px; }
+  .ctag {
+    background:rgba(123,63,207,0.2);
+    border:1px solid rgba(123,63,207,0.3);
+    color:var(--p6);font-size:0.7rem;padding:3px 10px;border-radius:100px;letter-spacing:0.3px;
+  }
+
+  .card-arrow {
+    margin-top:auto;padding-top:20px;
+    display:flex;align-items:center;gap:8px;
+    font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;
+    color:var(--p5);
+    transition:gap 0.2s;
+  }
+  .layanan-card:hover .card-arrow { gap:14px; }
+
+  /* ROBLOX card accent */
+  .card-roblox {
+    background:rgba(10,26,52,0.5);
+    border-color:rgba(59,130,246,0.25);
+  }
+  .card-roblox::before { background:linear-gradient(135deg,rgba(59,130,246,0.1),transparent); }
+  .card-roblox:hover { border-color:rgba(99,170,255,0.6);box-shadow:0 24px 72px rgba(10,50,150,0.35); }
+  .card-roblox .card-arrow { color:#6ab4ff; }
+  .card-roblox .ctag { background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.3);color:#93c5fd; }
+
+  /* STATS */
+  .hero-stats {
+    display:flex;gap:40px;justify-content:center;margin-top:56px;flex-wrap:wrap;
+    animation:fadeUp 0.7s 0.45s ease both;
+  }
+  .stat { text-align:center; }
+  .stat-num { font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--white);display:block; }
+  .stat-num span { color:var(--p5); }
+  .stat-label { font-size:0.75rem;color:var(--muted);letter-spacing:0.5px;margin-top:4px; }
+
+  /* FOOTER */
+  footer { background:rgba(26,5,51,0.9);border-top:1px solid rgba(123,63,207,0.15);padding:28px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;position:relative;z-index:2; }
+  .footer-brand { font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--white); }
+  .footer-brand span { color:var(--p5); }
+  .footer-copy { font-size:0.78rem;color:var(--muted); }
+
+  .reveal { opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease; }
+  .reveal.visible { opacity:1;transform:translateY(0); }
+
+  @media(max-width:700px) {
+    nav { padding:16px 20px; }
+    .nav-links { display:none; }
+    .layanan-grid { grid-template-columns:1fr; }
+    h1 { letter-spacing:-1.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="bg-blob blob1"></div>
+<div class="bg-blob blob2"></div>
+<div class="bg-blob blob3"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Kawara<span>Jasa</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Beranda</a></li>
+    <li><a href="jasa.html">Jasa Digital</a></li>
+    <li><a href="roblox.html">Roblox</a></li>
+    <li><a href="https://wa.me/6287720254002?text=Nama%20%3A%0APesanan%20%3A" target="_blank" class="nav-cta">Order WA ↗</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section id="hero">
+    <div class="hero-badge">
+      <div class="dot"></div>
+      Online · Murah · Terpercaya
+    </div>
+    <h1>Kawara<br><em>Jasa</em></h1>
+    <p class="hero-sub">Pilih layanan yang kamu butuhkan — jasa digital serba bisa atau pembuatan map Roblox profesional.</p>
+
+    <div class="layanan-grid">
+
+      <!-- JASA DIGITAL -->
+      <a href="jasa.html" class="layanan-card">
+        <div class="card-emoji">📁</div>
+        <div class="card-title">Jasa<br>Digital</div>
+        <div class="card-desc">PDF, dokumen, edit foto, desain CV & poster, hingga edit PPT. Cepat, rapi, harga terjangkau.</div>
+        <div class="card-tags">
+          <span class="ctag">PDF</span>
+          <span class="ctag">Dokumen</span>
+          <span class="ctag">Edit Foto</span>
+          <span class="ctag">CV & Poster</span>
+          <span class="ctag">PPT</span>
+        </div>
+        <div class="card-arrow">
+          Lihat Layanan <span>→</span>
+        </div>
+      </a>
+
+      <!-- ROBLOX -->
+      <a href="roblox.html" class="layanan-card card-roblox">
+        <div class="card-emoji">🎮</div>
+        <div class="card-title">Jasa Map<br>Roblox</div>
+        <div class="card-desc">Pembuatan map Roblox custom sesuai request. Obby, Roleplay, dan lainnya. Map sederhana hingga kompleks.</div>
+        <div class="card-tags">
+          <span class="ctag">Obby</span>
+          <span class="ctag">Roleplay</span>
+          <span class="ctag">Custom Map</span>
+          <span class="ctag">Profesional</span>
+        </div>
+        <div class="card-arrow">
+          Lihat Layanan <span>→</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">6<span>+</span></span>
+        <div class="stat-label">Jenis Layanan</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Fast<span>⚡</span></span>
+        <div class="stat-label">Proses Cepat</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">Revisi<span>✓</span></span>
+        <div class="stat-label">Bisa Revisi</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-brand">Kawara<span>Jasa</span></div>
+  <div class="footer-copy">© 2025 Kawara Jasa · Jasa Online Murah & Terpercaya</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 60);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*80); });
+  }, {threshold:0.12});
+  reveals.forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
