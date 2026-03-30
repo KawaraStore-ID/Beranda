@@ -47,14 +47,6 @@
   nav { position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(26,5,51,0.75);border-bottom:1px solid rgba(123,63,207,0.2); }
   .nav-logo { font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.5px;color:var(--white);text-decoration:none; }
   .nav-logo span { color:var(--p5); }
-  .nav-links { display:flex;gap:32px;list-style:none; }
-  .nav-links a { font-size:0.88rem;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:0.5px;transition:color 0.2s;position:relative; }
-  .nav-links a::after { content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--p5);transform:scaleX(0);transition:transform 0.25s; }
-  .nav-links a:hover { color:var(--accent); }
-  .nav-links a:hover::after { transform:scaleX(1); }
-  .nav-cta { background:var(--p4);color:var(--white)!important;padding:8px 20px;border-radius:100px;transition:background 0.2s!important; }
-  .nav-cta:hover { background:var(--p5)!important; }
-  .nav-cta::after { display:none!important; }
 
   main { position:relative;z-index:2; }
 
@@ -169,7 +161,6 @@
 
   @media(max-width:700px) {
     nav { padding:16px 20px; }
-    .nav-links { display:none; }
     .layanan-grid { grid-template-columns:1fr; }
     h1 { letter-spacing:-1.5px; }
   }
@@ -185,12 +176,6 @@
 
 <nav>
   <a href="./" class="nav-logo">Kawara<span>Jasa</span></a>
-  <ul class="nav-links">
-    <li><a href="./">Beranda</a></li>
-    <li><a href="./jasa.html">Jasa Digital</a></li>
-    <li><a href="./roblox.html">Roblox</a></li>
-    <li><a href="https://wa.me/6287720254002?text=Nama%20%3A%0APesanan%20%3A" target="_blank" class="nav-cta">Order WA ↗</a></li>
-  </ul>
 </nav>
 
 <main>
@@ -225,12 +210,12 @@
       <a href="./roblox.html" class="layanan-card card-roblox">
         <div class="card-emoji">🎮</div>
         <div class="card-title">Jasa Map<br>Roblox</div>
-        <div class="card-desc">Pembuatan map Roblox custom sesuai request. Obby, Roleplay, dan lainnya. Map sederhana hingga kompleks.</div>
+        <div class="card-desc">Pembuatan map Roblox custom sesuai request. Tersedia berbagai jenis map pilihan.</div>
         <div class="card-tags">
+          <span class="ctag">Gunung</span>
+          <span class="ctag">Club</span>
           <span class="ctag">Obby</span>
-          <span class="ctag">Roleplay</span>
-          <span class="ctag">Custom Map</span>
-          <span class="ctag">Profesional</span>
+          <span class="ctag">Scripter</span>
         </div>
         <div class="card-arrow">
           Lihat Layanan <span>→</span>
@@ -245,12 +230,12 @@
         <div class="stat-label">Jenis Layanan</div>
       </div>
       <div class="stat">
-        <span class="stat-num">Fast<span>⚡</span></span>
-        <div class="stat-label">Proses Cepat</div>
+        <span class="stat-num">Harga<span>💜</span></span>
+        <div class="stat-label">Terjangkau</div>
       </div>
       <div class="stat">
-        <span class="stat-num">Revisi<span>✓</span></span>
-        <div class="stat-label">Bisa Revisi</div>
+        <span class="stat-num">Waktu<span>📋</span></span>
+        <div class="stat-label">Sesuai Kesulitan</div>
       </div>
     </div>
   </section>
