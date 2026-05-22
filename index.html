@@ -997,34 +997,67 @@ function loadAsset() {
 
 function fetchThumbnail(id) {
   const img = document.getElementById('previewImg');
-  const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://thumbnails.roblox.com/v1/assets?assetIds='+id+'&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false')}`;
-  fetch(proxyUrl)
-    .then(r => r.json())
-    .then(data => {
-      if (data.data && data.data[0] && data.data[0].imageUrl) {
-        img.onload = onImgLoad;
-        img.onerror = () => tryFallbacks(id);
-        img.src = data.data[0].imageUrl;
-        img.style.display = 'block';
-        document.getElementById('previewLoader').classList.remove('active');
-      } else {
-        tryFallbacks(id);
-      }
-    })
-    .catch(() => tryFallbacks(id));
+  document.getElementById('previewLoader').classList.add('active');
+  img.style.display = 'none';
+
+  // Pakai allorigins proxy (paling reliable untuk bypass CORS)
+  const apiUrl = `https://thumbnails.roblox.com/v1/assets?assetIds=${id}&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false`;
+  const proxies = [
+    `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`,
+    `https://corsproxy.io/?url=${encodeURIComponent(apiUrl)}`,
+  ];
+
+  let proxyIdx = 0;
+  function tryProxy() {
+    if (proxyIdx >= proxies.length) { tryDirectFallbacks(id); return; }
+    const p = proxies[proxyIdx++];
+    fetch(p)
+      .then(r => r.json())
+      .then(wrapper => {
+        // allorigins wraps in { contents: "..." }, corsproxy returns direct
+        let data;
+        try { data = JSON.parse(wrapper.contents || JSON.stringify(wrapper)); } catch(e) { data = wrapper; }
+        if (data && data.data && data.data[0] && data.data[0].imageUrl) {
+          setImg(data.data[0].imageUrl, id);
+        } else { tryProxy(); }
+      })
+      .catch(() => tryProxy());
+  }
+  tryProxy();
 }
 
-function tryFallbacks(id) {
+function setImg(url, id) {
   const img = document.getElementById('previewImg');
+  const tmp = new Image();
+  tmp.crossOrigin = 'anonymous';
+  tmp.onload = () => {
+    img.src = url;
+    img.style.display = 'block';
+    document.getElementById('previewLoader').classList.remove('active');
+    onImgLoad();
+  };
+  tmp.onerror = () => tryDirectFallbacks(id);
+  tmp.src = url;
+}
+
+function tryDirectFallbacks(id) {
+  const img = document.getElementById('previewImg');
+  // Coba berbagai format URL thumbnail Roblox
   const urls = [
+    `https://tr.rbxcdn.com/180DAY-${id}/420/420/Image/Png/noFilter`,
     `https://tr.rbxcdn.com/${id}/420/420/Image/Png/noFilter`,
-    `https://assetdelivery.roblox.com/v1/asset/?id=${id}`
+    `https://t0.rbxcdn.com/180DAY-${id}/420/420/Image/Png`,
+    `https://assetdelivery.roblox.com/v1/asset/?id=${id}`,
   ];
   let idx = 0;
   function tryNext() {
-    if (idx >= urls.length) { onImgError(); return; }
+    if (idx >= urls.length) { 
+      document.getElementById('previewLoader').classList.remove('active');
+      onImgError(); 
+      return; 
+    }
     const url = urls[idx++];
-    img.onload = onImgLoad;
+    img.onload = () => { onImgLoad(); };
     img.onerror = tryNext;
     img.src = url;
     img.style.display = 'block';
@@ -1089,33 +1122,33 @@ async function downloadAsset() {
   btn.textContent = '⏳ Downloading...';
 
   if (currentType === 'texture' || currentType === 'image') {
-    // Download via thumbnail URL
-    const url = `https://thumbnails.roblox.com/v1/assets?assetIds=${currentId}&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false`;
+    // Ambil imageUrl via allorigins proxy, lalu download via proxy blob
+    const apiUrl = `https://thumbnails.roblox.com/v1/assets?assetIds=${currentId}&returnPolicy=PlaceHolder&size=420x420&format=Png&isCircular=false`;
     try {
-      const res = await fetch(url);
-      const data = await res.json();
-      let imgUrl = '';
-      if (data.data && data.data[0] && data.data[0].imageUrl) {
-        imgUrl = data.data[0].imageUrl;
-      } else {
-        imgUrl = `https://assetdelivery.roblox.com/v1/asset/?id=${currentId}`;
-      }
-      const imgRes = await fetch(imgUrl);
-      const blob = await imgRes.blob();
+      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`);
+      const wrapper = await res.json();
+      const data = JSON.parse(wrapper.contents);
+      let imgUrl = (data.data && data.data[0] && data.data[0].imageUrl)
+        ? data.data[0].imageUrl
+        : `https://assetdelivery.roblox.com/v1/asset/?id=${currentId}`;
+
+      // Download via allorigins blob proxy
+      const blobRes = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(imgUrl)}`);
+      const blob = await blobRes.blob();
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `rbx_asset_${currentId}.png`;
+      a.download = `kawara_${currentId}.png`;
       a.click();
-      btn.textContent = '✓ Downloaded';
-      setTimeout(() => btn.innerHTML = '⬇ Download', 2500);
+      btn.textContent = '✓ Downloaded!';
+      setTimeout(() => { btn.textContent = '⬇ Download'; }, 2500);
     } catch(e) {
-      // fallback open in new tab
+      // fallback: buka di tab baru
       window.open(`https://assetdelivery.roblox.com/v1/asset/?id=${currentId}`, '_blank');
-      btn.innerHTML = '⬇ Download';
+      btn.textContent = '⬇ Download';
     }
   } else {
     window.open(`https://assetdelivery.roblox.com/v1/asset/?id=${currentId}`, '_blank');
-    btn.innerHTML = '⬇ Download';
+    btn.textContent = '⬇ Download';
   }
 }
 
@@ -1175,13 +1208,16 @@ async function loadBulk() {
     thumb.onclick = () => downloadSingle(id);
     container.appendChild(thumb);
 
-    // Load thumbnail
+    // Load thumbnail via proxy
     try {
-      const res = await fetch(`https://thumbnails.roblox.com/v1/assets?assetIds=${id}&returnPolicy=PlaceHolder&size=150x150&format=Png&isCircular=false`);
-      const data = await res.json();
+      const apiUrl = `https://thumbnails.roblox.com/v1/assets?assetIds=${id}&returnPolicy=PlaceHolder&size=150x150&format=Png&isCircular=false`;
+      const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`);
+      const wrapper = await res.json();
+      const data = JSON.parse(wrapper.contents);
       if (data.data && data.data[0] && data.data[0].imageUrl) {
         const img = document.createElement('img');
         img.src = data.data[0].imageUrl;
+        img.onerror = () => { img.src = `https://tr.rbxcdn.com/${id}/150/150/Image/Png/noFilter`; };
         thumb.innerHTML = '';
         thumb.appendChild(img);
         thumb.appendChild(overlay);
