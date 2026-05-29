@@ -1006,7 +1006,9 @@ function showResult(newDurationSecs, bitrateKbps, blobBytes) {
   document.getElementById('robloxSpeedVal').textContent = robloxSpeed;
   document.getElementById('robloxSpeedVal2').textContent = robloxSpeed;
   document.getElementById('robloxExportSpeed').textContent = currentSpeed.toFixed(2);
-  document.getElementById('robloxWrap').classList.add('show');
+  const robloxEl = document.getElementById('robloxWrap');
+  robloxEl.style.display = 'block';
+  robloxEl.style.animation = 'fadeIn 0.4s ease forwards';
 }
 
 downloadBtn.addEventListener('click', () => {
